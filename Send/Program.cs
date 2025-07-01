@@ -9,14 +9,25 @@ try
     await using var connection = await factory.CreateConnectionAsync();
     await using var channel = await connection.CreateChannelAsync();
 
-    await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
-    
+
     // await channel.QueueDeclareAsync(queueName, true, false, false, null);
     // await channel.QueueBindAsync(queue: queueName, exchange: "logs", routingKey: string.Empty);
-
+    string opcion = Console.ReadLine() ?? "1";
     const string message = "Hello World!";
     var body = System.Text.Encoding.UTF8.GetBytes(message);
-    await channel.BasicPublishAsync(exchange: "logs", routingKey: String.Empty, body: body);
+
+    if (opcion == "1")
+    {
+        Console.WriteLine("Sending message Fanout...");
+        await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
+        await channel.BasicPublishAsync(exchange: "logs", routingKey: String.Empty, body: body);
+    }
+    else
+    {
+        Console.WriteLine("Sending message Direct...");
+        await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Direct);
+        await channel.BasicPublishAsync(exchange: "logs", routingKey: "info", body: body);
+    }
 }
 catch (Exception ex)
 {

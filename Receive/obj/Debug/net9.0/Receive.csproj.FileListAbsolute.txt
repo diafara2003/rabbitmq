@@ -16,3 +16,4 @@ C:\rabbit\Receive\obj\Debug\net9.0\refint\Receive.dll
 C:\rabbit\Receive\obj\Debug\net9.0\Receive.pdb
 C:\rabbit\Receive\obj\Debug\net9.0\Receive.genruntimeconfig.cache
 C:\rabbit\Receive\obj\Debug\net9.0\ref\Receive.dll
+C:\rabbit\Receive\obj\Debug\net9.0\Receive.sourcelink.json

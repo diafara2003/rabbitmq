@@ -16,3 +16,4 @@ C:\rabbit\Send\obj\Debug\net9.0\refint\Send.dll
 C:\rabbit\Send\obj\Debug\net9.0\Send.pdb
 C:\rabbit\Send\obj\Debug\net9.0\Send.genruntimeconfig.cache
 C:\rabbit\Send\obj\Debug\net9.0\ref\Send.dll
+C:\rabbit\Send\obj\Debug\net9.0\Send.sourcelink.json

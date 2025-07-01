@@ -11,7 +11,7 @@ try
     await using var connection = await factory.CreateConnectionAsync();
     await using var channel = await connection.CreateChannelAsync();
 
-    await channel.ExchangeDeclareAsync(exchange: exchange, type: ExchangeType.Fanout);
+    //await channel.ExchangeDeclareAsync(exchange: exchange, type: ExchangeType.Fanout);
 
     await channel.QueueDeclareAsync(queueName, true, false, false, null);
     await channel.QueueBindAsync(queue: queueName, exchange: exchange, routingKey: string.Empty);
@@ -19,13 +19,13 @@ try
     var consumer = new AsyncEventingBasicConsumer(channel);
     consumer.ReceivedAsync += (model, ea) =>
     {
-        byte[] body = ea.Body.ToArray();
+        var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
         Console.WriteLine($" [x] {message}");
         return Task.CompletedTask;
     };
 
-    Console.ReadLine();
+   
     await channel.BasicConsumeAsync(queueName, autoAck: true, consumer: consumer);
 }
 catch (Exception e)
