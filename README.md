@@ -32,26 +32,70 @@ Este proyecto es una guía básica para entender cómo funcionan las colas (queu
 
 ## Estructura del proyecto
 
-- `sender.js` o `sender.py`: Script para enviar mensajes.
-- `receiver.js` o `receiver.py`: Script para recibir mensajes.
+- `sender` : Proyecto para enviar mensajes.
+- `receiver`: Proyecto para recibir mensajes.
 
-## Ejemplo de uso de fanout y ack
 
-- Para usar un exchange de tipo `fanout`, debes declararlo así en tu código:
-  ```js
-  channel.assertExchange('logs', 'fanout', { durable: false });
-  ```
-- Para enviar un mensaje:
-  ```js
-  channel.publish('logs', '', Buffer.from('Mensaje'));
-  ```
-- Para recibir mensajes y enviar un `ack` manual:
-  ```js
-  channel.consume('nombre_de_la_cola', (msg) => {
-    // Procesar mensaje
-    channel.ack(msg); // Confirmar recepción
-  });
-  ```
+## Ejemplo de código
+
+### Enviar mensajes (Sender)
+
+```csharp
+// Program.cs del proyecto Send
+using RabbitMQ.Client;
+using System.Text;
+
+var factory = new ConnectionFactory() { HostName = "localhost" };
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
+
+channel.ExchangeDeclare(exchange: "logs", type: "fanout");
+
+string message = "Hola desde el sender!";
+var body = Encoding.UTF8.GetBytes(message);
+
+channel.BasicPublish(exchange: "logs",
+                     routingKey: "",
+                     basicProperties: null,
+                     body: body);
+
+Console.WriteLine($"[x] Enviado: {message}");
+```
+
+### Recibir mensajes (Receiver)
+
+```csharp
+// Program.cs del proyecto Recibe
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Text;
+
+var factory = new ConnectionFactory() { HostName = "localhost" };
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
+
+channel.ExchangeDeclare(exchange: "logs", type: "fanout");
+var queueName = channel.QueueDeclare().QueueName;
+channel.QueueBind(queue: queueName,
+                  exchange: "logs",
+                  routingKey: "");
+
+var consumer = new EventingBasicConsumer(channel);
+consumer.Received += (model, ea) =>
+{
+    var body = ea.Body.ToArray();
+    var message = Encoding.UTF8.GetString(body);
+    Console.WriteLine($"[x] Recibido: {message}");
+    channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // ACK manual
+};
+
+channel.BasicConsume(queue: queueName,
+                     autoAck: false, // Importante para usar ACK manual
+                     consumer: consumer);
+
+Console.WriteLine("Presiona [enter] para salir.");
+Console.ReadLine();
+```
 
 ## Recursos útiles
 
