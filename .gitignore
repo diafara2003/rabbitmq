@@ -1,13 +1,49 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Rider ignored files
-/.idea.Rabbit.iml
-/contentModel.xml
-/projectSettingsUpdater.xml
-/modules.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# Archivos de compilación
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+*.log
+
+# Paquetes NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Archivos de usuario
+*.userprefs
+
+# Archivos de configuración local
+*.local.json
+
+# Otros
+TestResults/
+*.dbmdl
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.vshost.*
+_ReSharper*/
+*.DotSettings.user
