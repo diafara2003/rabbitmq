@@ -2,18 +2,19 @@
 using RabbitMQ.Client.Events;
 using System.Text;
 
-string queueName = "hello";
+var queueName = "hello";
+var exchange = "logs";
 try
 {
     var factory = new ConnectionFactory { HostName = "localhost" };
-    
+
     await using var connection = await factory.CreateConnectionAsync();
     await using var channel = await connection.CreateChannelAsync();
 
-    await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
+    await channel.ExchangeDeclareAsync(exchange: exchange, type: ExchangeType.Fanout);
 
-   await channel.QueueDeclareAsync(queueName, true, false, false, null);
-    await channel.QueueBindAsync(queue: queueName, exchange: "logs", routingKey: string.Empty);
+    await channel.QueueDeclareAsync(queueName, true, false, false, null);
+    await channel.QueueBindAsync(queue: queueName, exchange: exchange, routingKey: string.Empty);
 
     var consumer = new AsyncEventingBasicConsumer(channel);
     consumer.ReceivedAsync += (model, ea) =>
